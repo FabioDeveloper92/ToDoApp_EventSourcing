@@ -31,8 +31,8 @@ Event Sourcing is an architectural pattern that focuses on storing the state of 
   - **Repository/**: This folder includes the repository implementations (`Repository`) for accessing and managing domain entities and aggregates. Repositories abstract the data access layer and provide methods for querying and persisting entities, often integrating with databases or other storage systems.
   - **Projections/**: This folder contains the projections (`Projections`) used for creating and managing read models. Projections transform and store the data from the event store into formats optimized for query operations. They enable efficient querying and reporting by generating views of the data based on the events that have occurred. Note: we will implement them
 
-- **Web.Api/**
-  *Note:*: This folder contains the API controllers that handle HTTP requests and responses. For example, controllers might handle operations like creating or fetching orders. The implementation can be improved by incorporating Mediator (such as MediatR) to streamline command and query handling, reducing controller complexity and enhancing maintainability.
+- **Web.Api/**  
+  *Note:* This folder contains the API controllers that handle HTTP requests and responses. For example, controllers might handle operations like creating or fetching orders. The implementation can be improved by incorporating Mediator (such as MediatR) to streamline command and query handling, reducing controller complexity and enhancing maintainability.
 
 ## Advantages
 
