@@ -1,4 +1,4 @@
-#Event Sourcing
+# Event Sourcing
 
 Event Sourcing is an architectural pattern that focuses on storing the state of an application as a sequence of events rather than a current state snapshot.
 
