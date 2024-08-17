@@ -13,6 +13,15 @@ Event Sourcing is an architectural pattern that focuses on storing the state of 
 3. **Eventual Consistency:**  
    In distributed architectures, the current state may not be immediately updated after each event. However, the system eventually reaches consistency once all components or services have processed the relevant events.
 
+## Architecture
+
+- **Application/**
+  - **Commands/**: This folder contains the commands (`Command`) that represent the intentions to modify the state of the system. Each command is an action that needs to be executed, such as `CreateOrderCommand`, `UpdateUserProfileCommand`, etc.
+  - **Queries/**: This folder includes the queries (`Query`) that are used to read data from the system. Queries are optimized for retrieving specific data, such as `GetOrderDetailsQuery`, `ListUserOrdersQuery`, etc.
+  - **Handlers/**: Commands and Queries contains their command handlers. Command handlers are responsible for executing the application logic associated with a command, while query handlers handle the processing of read requests.
+  - **Services/**: This folder contains the services (`Services`) that implement the business logic necessary to execute commands and respond to queries. Services can interact with repositories, other domain resources, or events to complete the required operations.
+
+
 ## Advantages
 
 - **Complete History:**  
