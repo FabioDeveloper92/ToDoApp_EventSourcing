@@ -27,7 +27,7 @@ namespace TodoApp.Application.Services
             public async Task<Guid> CreateTodoAsync(CreateTodoCommand command)
             {
                 var aggregate = new TodoAggregate();
-                aggregate.CreateTodoItem(command.Id, command.Title, command.Description);
+                aggregate.CreateTodoItem(command.Id, command.Title, command.Description, command.Status, command.ExpiredDate);
                 await _todoRepository.SaveAsync(aggregate);
                 return command.Id;
             }
@@ -35,7 +35,7 @@ namespace TodoApp.Application.Services
             public async Task UpdateTodoAsync(UpdateTodoCommand command)
             {
                 var aggregate = await _todoRepository.GetByIdAsync(command.Id);
-                aggregate.UpdateTodoItem(command.Id, command.Title, command.Description);
+                aggregate.UpdateTodoItem(command.Id, command.Title, command.Description, command.Status, command.ExpiredDate);
                 await _todoRepository.SaveAsync(aggregate);
             }
 

@@ -22,13 +22,13 @@ namespace TodoApp.Application.Commands
         public async Task Handle(CreateTodoCommand command)
         {
             var todoAggregate = new TodoAggregate();
-            todoAggregate.CreateTodoItem(command.Id, command.Title, command.Description);
+            todoAggregate.CreateTodoItem(command.Id, command.Title, command.Description, command.Status, command.ExpiredDate);
             await _todoRepository.SaveAsync(todoAggregate);
         }
         public async Task Handle(UpdateTodoCommand command)
         {
             var todoAggregate = await _todoRepository.GetByIdAsync(command.Id);
-            todoAggregate.UpdateTodoItem(command.Id, command.Title, command.Description);
+            todoAggregate.UpdateTodoItem(command.Id, command.Title, command.Description, command.Status, command.ExpiredDate);
             await _todoRepository.SaveAsync(todoAggregate);
         }
         public async Task Handle(DeleteTodoCommand command)
