@@ -27,14 +27,14 @@ namespace TodoApp.Domain.Entities
             ExpiredDate = expiredDate;
         }
 
-        public void ChangeStatus(TodoStatusEnum status)
+        public void UpdateStatus(TodoStatusEnum status)
         {
             Status = status;
         }
 
         public void MarkAsDeleted()
         {
-            ChangeStatus(TodoStatusEnum.Deleted);
+            UpdateStatus(TodoStatusEnum.Deleted);
         }
     }
 

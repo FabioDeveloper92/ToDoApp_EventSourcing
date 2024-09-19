@@ -35,14 +35,14 @@ namespace TodoApp.Api.Controllers
             return NoContent();
         }
 
-        //[HttpPut("updateStatus")]
-        //public async Task<IActionResult> UpdateStatus([FromBody] UpdateTodoStatusRequest request)
-        //{
-        //    var command = new UpdateTodoStatusCommand(request.Id, request.Status);
+        [HttpPut("updateStatus")]
+        public async Task<IActionResult> UpdateStatus([FromBody] UpdateTodoStatusRequest request)
+        {
+            var command = new UpdateTodoStatusCommand(request.Id, (TodoStatusEnum)request.Status);
 
-        //    await _todoService.UpdateTodoStatusAsync(command);
-        //    return NoContent();
-        //}
+            await _todoService.UpdateTodoStatusAsync(command);
+            return NoContent();
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTodo(Guid id)

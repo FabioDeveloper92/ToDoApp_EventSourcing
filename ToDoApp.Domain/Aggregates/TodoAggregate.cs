@@ -43,6 +43,14 @@ namespace TodoApp.Domain.Aggregates
             _changes.Add(new TodoItemUpdatedEvent(id, title, description, status, expiredDate));
         }
 
+        public void UpdateTodoStatus(Guid id, TodoStatusEnum status)
+        {
+            var todoItem = _todoItems.Single(t => t.Id == id);
+            todoItem.UpdateStatus(status);
+
+            _changes.Add(new TodoItemUpdatedStatusEvent(id, status));
+        }
+
         public void DeleteTodoItem(Guid id)
         {
             var todoItem = _todoItems.SingleOrDefault(t => t.Id == id);
@@ -79,6 +87,11 @@ namespace TodoApp.Domain.Aggregates
                 case TodoItemDeletedEvent e:
                     var deletedItem = _todoItems.Single(t => t.Id == e.Id);
                     deletedItem.MarkAsDeleted();
+                    break;
+
+                case TodoItemUpdatedStatusEvent e:
+                    var updatedItemStatus = _todoItems.Single(t => t.Id == e.Id);
+                    updatedItemStatus.UpdateStatus(e.Status);
                     break;
             }
         }
