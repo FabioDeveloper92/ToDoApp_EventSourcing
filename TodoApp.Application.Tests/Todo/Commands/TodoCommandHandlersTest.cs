@@ -21,7 +21,7 @@ namespace TodoApp.Application.Tests.Todo.Commands
         public async Task Handle_ShouldCreateTodoItem()
         {
             // Arrange
-            var command = new CreateTodoCommand(Guid.NewGuid(), "Test Todo", "Test Description");
+            var command = new CreateTodoCommand(Guid.NewGuid(), "Test Todo", "Test Description", Domain.Enum.TodoStatusEnum.Draft, new DateTime(2099, 1, 1));
 
             // Act
             await _handler.Handle(command);

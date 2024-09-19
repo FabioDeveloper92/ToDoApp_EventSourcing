@@ -24,11 +24,16 @@ namespace TodoApp.Application.Tests
         public async Task Handle_ShouldReturnTodoItem()
         {
             // Arrange
-            var todoId = Guid.NewGuid();
-            var todoItem = new TodoItem(todoId, "Test Todo", "Test Description");
+            var todoId = Guid.NewGuid(); 
+            var todoName = "My Test Update";
+            var todoDescription = "My Test Desc";
+            var todoStatus = Domain.Enum.TodoStatusEnum.Draft;
+            var todoExpiredDate = new DateTime();
+
+            var todoItem = new TodoItem(todoId, todoName, todoDescription, todoStatus, todoExpiredDate);
 
             var todoAggregate = new TodoAggregate();
-            todoAggregate.Apply(new TodoItemCreatedEvent(todoId, "Test Todo", "Test Description"));
+            todoAggregate.Apply(new TodoItemCreatedEvent(todoId, todoName, todoDescription, todoStatus, todoExpiredDate));
 
             _mockTodoRepository.Setup(x => x.GetByIdAsync(todoId)).ReturnsAsync(todoAggregate);
 
@@ -44,12 +49,17 @@ namespace TodoApp.Application.Tests
         {
             // Arrange
             var todoId = Guid.NewGuid();
-            var todoItem = new TodoItem(todoId, "Test Update", "Test Description");
+            var todoName = "My Test Update";
+            var todoDescription = "My Test Desc";
+            var todoStatus = Domain.Enum.TodoStatusEnum.Draft;
+            var todoExpiredDate = new DateTime();
+
+            var todoItem = new TodoItem(todoId, todoName, todoDescription, todoStatus, todoExpiredDate);
 
             var todoAggregate = new TodoAggregate();
-            todoAggregate.Apply(new TodoItemCreatedEvent(todoId, "Test Todo", "Test Description"));
-            todoAggregate.Apply(new TodoItemCreatedEvent(Guid.NewGuid(), "Test Todo2", "Test Description"));
-            todoAggregate.Apply(new TodoItemUpdatedEvent(todoId, "Test Update", "Test Description"));
+            todoAggregate.Apply(new TodoItemCreatedEvent(todoId, "Test Todo", "Test Description", todoStatus, todoExpiredDate));
+            todoAggregate.Apply(new TodoItemCreatedEvent(Guid.NewGuid(), "Test Todo2", "Test Description", todoStatus, todoExpiredDate));
+            todoAggregate.Apply(new TodoItemUpdatedEvent(todoId, todoName, todoDescription, todoStatus, todoExpiredDate));
 
             _mockTodoRepository.Setup(x => x.GetByIdAsync(todoId)).ReturnsAsync(todoAggregate);
 

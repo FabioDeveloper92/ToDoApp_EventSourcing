@@ -1,4 +1,5 @@
 ﻿using TodoApp.Domain.Entities;
+using TodoApp.Domain.Enum;
 using TodoApp.Domain.Events;
 
 namespace TodoApp.Domain.Aggregates
@@ -22,30 +23,30 @@ namespace TodoApp.Domain.Aggregates
 
         public IReadOnlyList<ITodoEvent> GetUncommittedChanges() => _changes.AsReadOnly();
 
-        public void CreateTodoItem(Guid id, string title, string description)
+        public void CreateTodoItem(Guid id, string title, string description, TodoStatusEnum status, DateTime? expiredDate)
         {
             if (_todoItems.Any(t => t.Id == id))
                 throw new Exception("Todo item already exists.");
 
-            var todoItem = new TodoItem(id, title, description);
+            var todoItem = new TodoItem(id, title, description, status, expiredDate);
             _todoItems.Add(todoItem);
-            _changes.Add(new TodoItemCreatedEvent(id, title, description));
+            _changes.Add(new TodoItemCreatedEvent(id, title, description, status, expiredDate));
         }
 
-        public void UpdateTodoItem(Guid id, string title, string description)
+        public void UpdateTodoItem(Guid id, string title, string description, TodoStatusEnum status, DateTime? expiredDate)
         {
             var todoItem = _todoItems.SingleOrDefault(t => t.Id == id);
-            if (todoItem == null || todoItem.IsDeleted)
+            if (todoItem == null || todoItem.Status == TodoStatusEnum.Deleted)
                 throw new Exception("Todo item not found or has been deleted.");
 
-            todoItem.Update(title, description);
-            _changes.Add(new TodoItemUpdatedEvent(id, title, description));
+            todoItem.Update(title, description, status, expiredDate);
+            _changes.Add(new TodoItemUpdatedEvent(id, title, description, status, expiredDate));
         }
 
         public void DeleteTodoItem(Guid id)
         {
             var todoItem = _todoItems.SingleOrDefault(t => t.Id == id);
-            if (todoItem == null || todoItem.IsDeleted)
+            if (todoItem == null || todoItem.Status == TodoStatusEnum.Deleted)
                 throw new Exception("Todo item not found or has been deleted.");
 
             todoItem.MarkAsDeleted();
@@ -55,7 +56,7 @@ namespace TodoApp.Domain.Aggregates
         public TodoItem GetTodoItemById(Guid id)
         {
             var todoItem = _todoItems.SingleOrDefault(t => t.Id == id);
-            if (todoItem == null || todoItem.IsDeleted)
+            if (todoItem == null || todoItem.Status == TodoStatusEnum.Deleted)
                 throw new Exception("Todo item not found or has been deleted.");
 
             return todoItem;
@@ -66,13 +67,13 @@ namespace TodoApp.Domain.Aggregates
             switch (@event)
             {
                 case TodoItemCreatedEvent e:
-                    var createdItem = new TodoItem(e.Id, e.Title, e.Description);
+                    var createdItem = new TodoItem(e.Id, e.Title, e.Description, e.Status, e.ExpiredDate);
                     _todoItems.Add(createdItem);
                     break;
 
                 case TodoItemUpdatedEvent e:
                     var updatedItem = _todoItems.Single(t => t.Id == e.Id);
-                    updatedItem.Update(e.Title, e.Description);
+                    updatedItem.Update(e.Title, e.Description, e.Status, e.ExpiredDate);
                     break;
 
                 case TodoItemDeletedEvent e:

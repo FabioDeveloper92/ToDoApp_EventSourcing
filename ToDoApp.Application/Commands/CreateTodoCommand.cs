@@ -1,17 +1,14 @@
-﻿namespace TodoApp.Application.Commands
-{
-    public class CreateTodoCommand
-    {
-        public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+﻿using TodoApp.Domain.Enum;
 
-        public CreateTodoCommand(Guid id, string title, string description)
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-        }
+namespace TodoApp.Application.Commands
+{
+    public class CreateTodoCommand(Guid id, string title, string description, TodoStatusEnum status, DateTime? expiredDate)
+    {
+        public Guid Id { get; set; } = id;
+        public string Title { get; set; } = title;
+        public string Description { get; set; } = description;
+        public TodoStatusEnum Status { get; set; } = status;
+        public DateTime? ExpiredDate { get; set; } = expiredDate;
     }
 
 }

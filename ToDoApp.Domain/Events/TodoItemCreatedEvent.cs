@@ -1,17 +1,14 @@
-﻿namespace TodoApp.Domain.Events
-{
-    public class TodoItemCreatedEvent : ITodoEvent
-    {
-        public Guid Id { get; }
-        public string Title { get; }
-        public string Description { get; }
+﻿using TodoApp.Domain.Enum;
 
-        public TodoItemCreatedEvent(Guid id, string title, string description)
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-        }
+namespace TodoApp.Domain.Events
+{
+    public class TodoItemCreatedEvent(Guid id, string title, string description, TodoStatusEnum status, DateTime? expiredDate) : ITodoEvent
+    {
+        public Guid Id { get; } = id;
+        public string Title { get; } = title;
+        public string Description { get; } = description;
+        public TodoStatusEnum Status { get; } = status;
+        public DateTime? ExpiredDate { get; } = expiredDate;
     }
 
 }
