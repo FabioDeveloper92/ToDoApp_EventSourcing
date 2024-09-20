@@ -58,11 +58,11 @@ namespace TodoApp.Api.Controllers
             return Ok(result);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> GetTodos([FromBody] GetTodosRequest request)
-        //{
-        //    var result = await _todoService.GetTodosAsync(id);
-        //    return Ok(result);
-        //}
+        [HttpPost]
+        public async Task<IActionResult> GetTodos([FromBody] GetTodosRequest request)
+        {
+            var result = await _todoService.GetTodosAsync();
+            return Ok(result);
+        }
     }
 }

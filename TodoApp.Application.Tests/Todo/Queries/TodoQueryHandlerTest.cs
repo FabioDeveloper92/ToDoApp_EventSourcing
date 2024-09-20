@@ -25,7 +25,7 @@ namespace TodoApp.Application.Tests
         public async Task Handle_ShouldReturnTodoItem()
         {
             // Arrange
-            var todoId = Guid.NewGuid(); 
+            var todoId = Guid.NewGuid();
             var todoName = "My Test Update";
             var todoDescription = "My Test Desc";
             var todoStatus = Domain.Enum.TodoStatusEnum.Draft;
@@ -96,6 +96,48 @@ namespace TodoApp.Application.Tests
 
             // Assert
             result.Should().BeEquivalentTo(todoItem);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldReturnTodoItemIsNotDeleted()
+        {
+            // Arrange
+            var todoId = Guid.NewGuid();
+            var todoName = "My Test Update";
+            var todoDescription = "My Test Desc";
+            var todoStatus = TodoStatusEnum.Completed;
+            var todoExpiredDate = new DateTime();
+
+            var todoId2 = Guid.NewGuid();
+
+            var todoItem = new TodoItem(todoId, todoName, todoDescription, todoStatus, todoExpiredDate);
+            var todoItem2 = new TodoItem(todoId, todoName, todoDescription, todoStatus, todoExpiredDate);
+
+            var todoAggregate = new TodoAggregate();
+            var todoAggregate2 = new TodoAggregate();
+            var todoAggregate3 = new TodoAggregate();
+
+            todoAggregate.Apply(new TodoItemCreatedEvent(todoId, todoName, todoDescription, TodoStatusEnum.Draft, todoExpiredDate));
+
+            todoAggregate2.Apply(new TodoItemCreatedEvent(Guid.NewGuid(), todoName, todoDescription, TodoStatusEnum.Draft, todoExpiredDate));
+
+            todoAggregate3.Apply(new TodoItemCreatedEvent(todoId2, todoName, todoDescription, TodoStatusEnum.Draft, todoExpiredDate));
+
+            todoAggregate.Apply(new TodoItemUpdatedStatusEvent(todoId, TodoStatusEnum.Working));
+
+            todoAggregate3.Apply(new TodoItemUpdatedStatusEvent(todoId2, TodoStatusEnum.Deleted));
+
+            todoAggregate.Apply(new TodoItemUpdatedStatusEvent(todoId, todoStatus));
+
+            _mockTodoRepository
+                .Setup(x => x.GetAllTodosAsync())
+                .ReturnsAsync(new[] { todoAggregate, todoAggregate2, todoAggregate3 });
+
+            // Act
+            var result = await _handler.Handle(new GetTodosQuery());
+
+            // Assert
+            result.Should().HaveCount(2);
         }
     }
 }

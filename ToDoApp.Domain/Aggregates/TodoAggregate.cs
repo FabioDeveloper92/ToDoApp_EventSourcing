@@ -70,6 +70,13 @@ namespace TodoApp.Domain.Aggregates
             return todoItem;
         }
 
+        public TodoItem[] GetTodoItems()
+        {
+            return _todoItems
+                .Where(t => t.Status != TodoStatusEnum.Deleted)
+                .ToArray();
+        }
+
         public void Apply(ITodoEvent @event)
         {
             switch (@event)

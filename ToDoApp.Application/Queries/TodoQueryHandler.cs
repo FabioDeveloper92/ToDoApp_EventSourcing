@@ -6,6 +6,7 @@ namespace TodoApp.Application.Queries
     public interface ITodoQueryHandlers
     {
         Task<TodoItem> Handle(GetTodoByIdQuery query);
+        Task<TodoItem[]> Handle(GetTodosQuery query);
     }
 
     public class TodoQueryHandlers : ITodoQueryHandlers
@@ -21,6 +22,15 @@ namespace TodoApp.Application.Queries
         {
             var todoAggregate = await _todoRepository.GetByIdAsync(query.Id);
             return todoAggregate.GetTodoItemById(query.Id);
+        }
+
+        public async Task<TodoItem[]> Handle(GetTodosQuery query)
+        {
+            var aggregates = await _todoRepository.GetAllTodosAsync();
+
+            return aggregates
+                .SelectMany(a => a.GetTodoItems())
+                .ToArray();
         }
     }
 }

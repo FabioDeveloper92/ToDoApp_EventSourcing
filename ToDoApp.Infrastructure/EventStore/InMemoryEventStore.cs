@@ -14,6 +14,12 @@ namespace TodoApp.Infrastructure.EventStore
             return Task.FromResult(_eventStreams[aggregateId]);
         }
 
+        public Task<List<List<ITodoEvent>>> GetEventsAsync()
+        {
+            var allEventStreams = _eventStreams.Values.ToList();
+            return Task.FromResult(allEventStreams);
+        }
+
         public Task SaveEventsAsync(Guid aggregateId, IReadOnlyCollection<ITodoEvent> events)
         {
             if (!_eventStreams.ContainsKey(aggregateId))
